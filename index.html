@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&lt;text-mark&gt; Web Component - Text Range Marking & Annotations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        section h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #764ba2;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        section p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            font-size: 0.9rem;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .demo-container {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        text-mark {
+            width: 100%;
+            height: 600px;
+        }
+
+        .usage-example {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .usage-example code {
+            display: block;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            margin: 0.5rem 0;
+        }
+
+        footer {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .api-table th,
+        .api-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        .api-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .api-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            text-mark {
+                height: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <header>
+            <h1>&lt;text-mark&gt;</h1>
+            <p>A native Web Component for marking text ranges with annotations and custom styling</p>
+            <article class="feature-grid">
+                <article class="feature-card">
+                    <h3>📝 Range Selection</h3>
+                    <p>Highlight text ranges directly in the editor with simple mouse selection</p>
+                </article>
+                <article class="feature-card">
+                    <h3>🏷️ Annotations</h3>
+                    <p>Add names and detailed annotations to each marked range</p>
+                </article>
+                <article class="feature-card">
+                    <h3>🎨 Custom Colors</h3>
+                    <p>Choose custom colors for each text range with an integrated color picker</p>
+                </article>
+                <article class="feature-card">
+                    <h3>⚙️ Real-time Updates</h3>
+                    <p>See live updates as you modify range properties</p>
+                </article>
+            </article>
+        </header>
+
+        <section>
+            <h2>Demo</h2>
+            <article class="demo-container">
+                <text-mark></text-mark>
+            </article>
+        </section>
+
+        <section>
+            <h2>Usage</h2>
+            <h3>Basic Implementation</h3>
+            <p>Simply add the component to your HTML:</p>
+            <article class="usage-example">
+                <code>&lt;text-mark&gt;&lt;/text-mark&gt;</code>
+            </article>
+
+            <h3>Include the Script</h3>
+            <pre><code>&lt;script src="text-mark.js" type="module"&gt;&lt;/script&gt;</code></pre>
+
+            <h3>Features</h3>
+            <ul>
+                <li><strong>Text Selection:</strong> Click and drag in the left textarea to select and highlight text ranges</li>
+                <li><strong>Range Management:</strong> Each selected range appears in the right column as an editable item</li>
+                <li><strong>Properties:</strong>
+                    <ul>
+                        <li><code>START</code> - Starting position in the text</li>
+                        <li><code>END</code> - Ending position in the text</li>
+                        <li><code>NAME</code> - Label for the range</li>
+                        <li><code>ANNOTATION</code> - Detailed notes about the range</li>
+                        <li><code>COLOR</code> - Highlight color for the range</li>
+                    </ul>
+                </li>
+                <li><strong>Live Updates:</strong> Changing any property in the right column immediately updates the textarea highlighting and styling</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>How It Works</h2>
+            <h3>Two-Column Layout</h3>
+            <p>The component displays a two-column interface:</p>
+            <ul>
+                <li><strong>Left Column:</strong> A textarea where you can enter and edit text, with visual highlighting of marked ranges</li>
+                <li><strong>Right Column:</strong> A list of all marked ranges with editable properties and controls</li>
+            </ul>
+
+            <h3>Creating Ranges</h3>
+            <ol>
+                <li>Select text in the textarea by clicking and dragging</li>
+                <li>The selected range automatically appears in the right column</li>
+                <li>Edit the range properties as needed</li>
+                <li>Changes are reflected immediately in the textarea</li>
+            </ol>
+
+            <h3>Editing Ranges</h3>
+            <p>For each range in the right column, you can:</p>
+            <ul>
+                <li>Adjust the START and END positions with numeric input fields</li>
+                <li>Add or edit the range NAME</li>
+                <li>Add detailed ANNOTATION text</li>
+                <li>Choose a highlight COLOR with the integrated color picker</li>
+                <li>Delete ranges using the delete button</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>API Reference</h2>
+            <h3>Properties</h3>
+            <table class="api-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>text</code></td>
+                        <td>String</td>
+                        <td>The text content in the editor</td>
+                    </tr>
+                    <tr>
+                        <td><code>ranges</code></td>
+                        <td>Array</td>
+                        <td>Array of text range objects</td>
+                    </tr>
+                    <tr>
+                        <td><code>defaultColor</code></td>
+                        <td>String</td>
+                        <td>Default highlight color (hex color code)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Range Object Structure</h3>
+            <pre><code>{
+  start: 0,                    // Start position in text
+  end: 10,                     // End position in text
+  name: "Entity",              // Range label
+  annotation: "Important text",// Detailed notes
+  color: "#FFFF00"             // Highlight color
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>Browser Support</h2>
+            <p>The &lt;text-mark&gt; component uses modern Web Component APIs and is supported in all modern browsers:</p>
+            <ul>
+                <li>Chrome/Edge 77+</li>
+                <li>Firefox 63+</li>
+                <li>Safari 14+</li>
+                <li>iOS Safari 14+</li>
+                <li>Chrome Android 77+</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Examples</h2>
+            <h3>Example 1: Document Analysis</h3>
+            <p>Mark important entities in a document:</p>
+            <ul>
+                <li>People names - Yellow highlights</li>
+                <li>Organizations - Blue highlights</li>
+                <li>Locations - Green highlights</li>
+            </ul>
+
+            <h3>Example 2: Code Review</h3>
+            <p>Annotate code snippets with review comments and suggestions</p>
+
+            <h3>Example 3: Content Curation</h3>
+            <p>Mark key passages in articles and web content for later reference</p>
+        </section>
+
+        <footer>
+            <p>&lt;text-mark&gt; Web Component - A lightweight, dependency-free text marking solution</p>
+            <p>Built with native JavaScript and Web Components</p>
+        </footer>
+    </main>
+
+    <script src="text-mark.js" type="module"></script>
+</body>
+</html>
